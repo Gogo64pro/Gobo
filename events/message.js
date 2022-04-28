@@ -6,7 +6,7 @@ module.exports = {
             const args = message.content.slice(bot.prefix.length).split(/ +/)
             const command = args.shift().toLowerCase()
             const {handle} = require('../handlers/command.js')
-            handle(message,command, args, bot.Client)
+            handle(message,command, args, bot)
         }
     }
 }

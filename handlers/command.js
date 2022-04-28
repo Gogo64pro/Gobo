@@ -16,10 +16,11 @@ module.exports={
         Client.commandFiles = new Discord.Collection()
         Client.commandFiles.set(0,commandFiles)
     },
-    handle: (message,command,args,Client) => {
+    handle: (message,command,args,bot) => {
+        const {Client} = bot
         for(const commandFile of Client.commandFiles.get(0)){
             if(commandFile === `${command}.js` || Client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command))) {
-                (Client.commands.get(command) || Client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command))).execute(message, args, command)
+                (Client.commands.get(command) || Client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command))).execute(message, args, command, bot)
                 return;
             }
         }
