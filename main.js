@@ -22,6 +22,22 @@ module.exports = bot
 Client.login(process.env.TOKEN).then(
     () => {
         slashCommands.init(Client)
+        process.stdin.setRawMode(true);
+        process.stdin.setEncoding('utf8');
+        process.stdin.resume();
+        process.stdin.on('data', function (key) {
+            switch (key) {
+                case'\u0003':
+                    process.stdout.write('^C')
+                    process.exit(0);
+                    break;
+                case 'r':
+                    console.log('Reloading...')
+                    Client.loadEvents(bot,true);
+                    Client.loadCommands(bot,true);
+                    break;
+            }
+        })
     }
 )
 
