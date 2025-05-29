@@ -4,7 +4,7 @@ module.exports =  {
     slash: {
         name: 'kick',
         description: 'Kick a member of the server',
-        optons:[
+        options:[
             {
                 name: 'user',
                 description: 'The user to kick',
@@ -19,8 +19,8 @@ module.exports =  {
             }
         ]  
     },
-    async execute(message,args){
-        if(message.member.permissions.has('KICK_MEMBERS')){
+    async execute(message,args,alias,bot){
+        if(bot.owners.includes(message.author.id)||message.member.permissions.has('KICK_MEMBERS')){
             const member = message.mentions.users.first()
             if(member){
                 const memberTarget = message.guild.members.cache.get(member.id)
@@ -30,7 +30,7 @@ module.exports =  {
                     },
                     (error) => {
                         if(error.code === 50007 || error.code === 50013){
-                            message.channel.send('That member has admin/mod and i cannot kick them or there is an error')
+                            message.channel.send('That member has admin/mod and I cannot kick them or there is an error')
                         }
                     }
                 )
@@ -45,14 +45,14 @@ module.exports =  {
     executeSlash: async (interaction) => {
         const member = interaction.options._hoistedOptions[0].user
         const memberTarget = interaction.member.guild.members.cache.get(member.id)
-        const reason = interaction.options._hoistedOptions[1].value || 'No reason given'
-            memberTarget.ban({reason:reason}).then(
-                (responce) =>{
+        const reason = interaction.options._hoistedOptions[1]?.value ?? 'No reason given'
+            memberTarget.kick({reason:reason}).then(
+                (response) =>{
                     interaction.reply({content: `@${member.username} was kicked`})
                 },
                 (error) => {
                     if(error.code === 50007 || error.code === 50013){
-                        interaction.reply('That member has admin/mod and i cannot kick them or there is an error')
+                        interaction.reply('That member has admin/mod and I cannot kick them or there is an error')
                     }
                 })
     }

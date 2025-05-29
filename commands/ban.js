@@ -20,7 +20,7 @@ module.exports =  {
         ]
     },
     async execute(message,args){
-        if(message.member.permissions.has('BAN_MEMBERS')){
+        if(bot.owners.includes(message.author.id)||message.member.permissions.has('BAN_MEMBERS')){
             const member = message.mentions.users.first()
             if(member){
                 const memberTarget = message.guild.members.cache.get(member.id)
@@ -45,7 +45,7 @@ module.exports =  {
     executeSlash: async (interaction) => {
         const member = interaction.options._hoistedOptions[0].user
         const memberTarget = interaction.member.guild.members.cache.get(member.id)
-        const reason = interaction.options._hoistedOptions[1].value || 'No reason given'
+        const reason = interaction.options._hoistedOptions[1]?.value ?? 'No reason given'
             memberTarget.ban({reason:reason}).then(
                 (responce) =>{
                     interaction.reply({content: `@${member.username} was banned`})
